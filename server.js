@@ -23,7 +23,7 @@ app.use(express.static('website'));
 
 //Route to get all data
 app.get('/',(req,res)=>{
-    res.send(projectData)
+    //res.send(projectData)
 });
 
 //Route for post data

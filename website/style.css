@@ -119,3 +119,10 @@ button:focus {
     font-family: 'Oswald', sans-serif;
 
 } 
+
+textarea {
+    resize: none;
+    height: 100px;
+    width: 320px;
+ }
+ 
