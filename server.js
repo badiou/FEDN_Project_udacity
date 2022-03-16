@@ -23,18 +23,15 @@ app.use(express.static('website'));
 
 //Route to get all data
 app.get('/',(req,res)=>{
-    //res.send(projectData)
+    res.send((projectData));
 });
 
 //Route for post data
 app.post('/add',(req,res)=>{
     let newData=req.body;
-    let newEntry={
-        temp:newData.temp,
-        date:newData.date,
-        content:newData.content
-    }
-    projectData.push(newEntry);
+    projectData['temp']=newData.temp;
+    projectData['content']=newData.content;
+    projectData['date']=newData.date
     res.send(projectData);
 })
 

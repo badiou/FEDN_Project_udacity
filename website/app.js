@@ -14,6 +14,7 @@ btn.addEventListener('click', performAction);
 //here i write eprformAction function
 
 function performAction(e){
+    e.preventDefault();
     //console.log('hello');
     //call getMetheo function and pass the zipcode that the user set in input element
     //exemple zipcode=94040 exemple country=us
@@ -21,7 +22,21 @@ function performAction(e){
    const myZipCode=document.getElementById('zip').value;
    //get the country which i have selected
    const myCountry=document.getElementById('country').value;
-        getMetheo(baseURL,myZipCode,myCountry,appid);
+   
+        getMetheo(baseURL,myZipCode,myCountry,appid)
+        .then((data)=>{
+            const feelings=document.getElementById('feelings').value;
+            console.log(`Data i send for the post request: ${data}`);
+            //here i use the temp value from the location.
+            postData('/add',{temp:data.main.temp, content:feelings,date:newDate})
+
+        }).then(function(){  
+            updateUI();
+
+        }).catch(function(error){
+           
+            alert('Zipcode or country not valid');
+        });
 }
 
 const getMetheo=async(baseURL,zipcode,myCountry, appid)=>{
@@ -43,7 +58,50 @@ const getMetheo=async(baseURL,zipcode,myCountry, appid)=>{
         console.log("error",error)
 
     }
-    if(data.cod!='200'){
-        console.log(data[0].message);
-    }
-}
+    
+};
+
+// POST REQUEST
+const postData = async ( url = '', data = {})=>{
+    console.log(data);
+      const response = await fetch(url, {
+      method: 'POST', 
+      credentials: 'same-origin',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      // parse Json data to string
+      body: JSON.stringify({
+          temp:data.temp,
+          date:data.date,
+          content:data.content
+      }) 
+    });
+  
+      try 
+      {
+       
+        const newData = await response.json();
+        return newData;
+      }
+      catch(error) 
+      {
+      console.log("error", error);
+      }
+  };
+
+
+
+  const updateUI = async () => {
+    const request = await fetch('/');
+    //try{
+      const allData = await request.json();
+        console.log(allData);
+      document.getElementById('date').innerHTML = allData.date
+      document.getElementById('temp').innerHTML = allData.temp
+      document.getElementById('content').innerHTML = allData.content;
+    
+   // }catch(error){
+      //console.log("error", error);
+    //}
+  };
