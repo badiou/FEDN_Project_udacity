@@ -31,7 +31,8 @@ app.post('/add',(req,res)=>{
     let newData=req.body;
     projectData['temp']=newData.temp;
     projectData['content']=newData.content;
-    projectData['date']=newData.date
+    projectData['date']=newData.date;
+    projectData['name']=newData.name;
     res.send(projectData);
 })
 

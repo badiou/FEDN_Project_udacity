@@ -27,7 +27,7 @@ function performAction(e){
             const feelings=document.getElementById('feelings').value;
             console.log(`Data i send for the post request: ${data}`);
             //here i use the temp value from the location.
-            postData('/add',{temp:data.main.temp, content:feelings,date:newDate})
+            postData('/add',{temp:data.main.temp, content:feelings,date:newDate,name:data.name})
 
         }).then(function(){  
             updateUI();
@@ -75,7 +75,8 @@ const postData = async ( url = '', data = {})=>{
       body: JSON.stringify({
           temp:data.temp,
           date:data.date,
-          content:data.content
+          content:data.content,
+          name:data.name
       }) 
     });
   
@@ -97,7 +98,9 @@ const postData = async ( url = '', data = {})=>{
     const request = await fetch('/all');
     //try{
       const allData = await request.json();
-        console.log(allData);
+
+      console.log(allData);
+      document.getElementById('country_name').innerHTML = `City:${allData.name}`;
       document.getElementById('date').innerHTML = allData.date
       document.getElementById('temp').innerHTML = `${allData.temp}°F ~ ${convertFtoC(allData.temp)}°C`;
       document.getElementById('content').innerHTML = allData.content;
