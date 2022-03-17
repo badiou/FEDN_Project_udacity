@@ -1,12 +1,11 @@
 /* Global Variables */
 
-
-let baseURL='https://api.openweathermap.org/data/2.5/weather?zip=';
-let appid='&appid=aa9e528c0ae4dff30a969cc877fa2b3d';
+const baseURL='https://api.openweathermap.org/data/2.5/weather?zip=';
+const appid='&appid=aa9e528c0ae4dff30a969cc877fa2b3d&units=imperial';
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
 
+let newDate= d.getDate()+'/'+(d.getMonth()+1)+'/'+ d.getFullYear();
 
 const btn = document.querySelector('#generate');
 btn.addEventListener('click', performAction);
@@ -32,10 +31,12 @@ function performAction(e){
 
         }).then(function(){  
             updateUI();
+            //after update the UI i need to set input empty
+            empty_input();
 
         }).catch(function(error){
            
-            alert('Zipcode or country not valid');
+            alert('Zip code or country not valid');
         });
 }
 
@@ -93,15 +94,28 @@ const postData = async ( url = '', data = {})=>{
 
 
   const updateUI = async () => {
-    const request = await fetch('/');
+    const request = await fetch('/all');
     //try{
       const allData = await request.json();
         console.log(allData);
       document.getElementById('date').innerHTML = allData.date
-      document.getElementById('temp').innerHTML = allData.temp
+      document.getElementById('temp').innerHTML = `${allData.temp}°F ~ ${convertFtoC(allData.temp)}°C`;
       document.getElementById('content').innerHTML = allData.content;
     
    // }catch(error){
       //console.log("error", error);
     //}
   };
+
+  //function to convert F to Celsuis
+  function convertFtoC( temperature){
+    return ((temperature-32)*5/9).toFixed(2)
+  }
+
+  //fucntion to set input empty
+  function empty_input() {
+    document.getElementById('zip').value='';
+    document.getElementById('country').value='--Select the country--';
+    document.getElementById('feelings').value='';
+
+  }
